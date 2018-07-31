@@ -52,6 +52,8 @@ type Binance interface {
 	Withdraw(wr WithdrawRequest) (*WithdrawResult, error)
 	// DepositHistory lists deposit data.
 	DepositHistory(hr HistoryRequest) ([]*Deposit, error)
+	// DepositAddress lists deposit data.
+	DepositAddress(da DepositAddressRequest) (*DepositAddressResponse, error)
 	// WithdrawHistory lists withdraw data.
 	WithdrawHistory(hr HistoryRequest) ([]*Withdrawal, error)
 
@@ -459,6 +461,13 @@ type HistoryRequest struct {
 	Timestamp  time.Time
 }
 
+type DepositAddressRequest struct {
+	Asset      string
+	Status     *int
+	Timestamp  time.Time
+	RecvWindow time.Duration
+}
+
 // Deposit represents Deposit data.
 type Deposit struct {
 	InsertTime time.Time
@@ -467,9 +476,22 @@ type Deposit struct {
 	Status     int
 }
 
+type DepositAddressResponse []DepositAddress
+type DepositAddress struct {
+	Address    string `json:"address"`
+	Success    bool   `json:"success"`
+	AddressTag string `json:"addressTag"`
+	Asset      string `json:"asset"`
+}
+
 // DepositHistory lists deposit data.
 func (b *binance) DepositHistory(hr HistoryRequest) ([]*Deposit, error) {
 	return b.Service.DepositHistory(hr)
+}
+
+// DepositHistory lists deposit data.
+func (b *binance) DepositAddress(hr DepositAddressRequest) (*DepositAddressResponse, error) {
+	return b.Service.DepositAddress(hr)
 }
 
 // Withdrawal represents withdrawal data.

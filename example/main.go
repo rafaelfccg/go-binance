@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/binance-exchange/go-binance"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
-	"github.com/binance-exchange/go-binance"
 )
 
 func main() {
@@ -59,7 +59,6 @@ func main() {
 	fmt.Println("waiting for signal")
 	<-done
 	fmt.Println("exit")
-	return
 
 	kl, err := b.Klines(binance.KlinesRequest{
 		Symbol:   "BNBETH",

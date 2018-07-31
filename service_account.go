@@ -2,6 +2,7 @@ package binance
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"strconv"
 
@@ -533,6 +534,38 @@ func (as *apiService) DepositHistory(hr HistoryRequest) ([]*Deposit, error) {
 
 	return dc, nil
 }
+
+func (as *apiService) DepositAddress(da DepositAddressRequest) (Addresses *DepositAddressResponse, err error) {
+	params := make(map[string]string)
+	params["timestamp"] = strconv.FormatInt(unixMillis(da.Timestamp), 10)
+	params["asset"] = da.Asset
+
+	if da.Status != nil {
+		params["status"] = fmt.Sprintf("%b", da.Status)
+	}
+
+	if da.RecvWindow != 0 {
+		params["recvWindow"] = strconv.FormatInt(recvWindow(da.RecvWindow), 10)
+	}
+
+	res, err := as.request("POST", "/wapi/v3/depositAddress.html", params, true, true)
+	if err != nil {
+		return
+	}
+	textRes, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to read response from depositHistory.post")
+	}
+	defer res.Body.Close()
+
+	response := new(DepositAddressResponse)
+	err = json.Unmarshal(textRes, res)
+	if err != nil {
+		return
+	}
+	return response, nil
+}
+
 func (as *apiService) WithdrawHistory(hr HistoryRequest) ([]*Withdrawal, error) {
 	params := make(map[string]string)
 	params["timestamp"] = strconv.FormatInt(unixMillis(hr.Timestamp), 10)

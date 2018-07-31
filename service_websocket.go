@@ -341,7 +341,7 @@ func (as *apiService) UserDataWebsocket(urwr UserDataWebsocketRequest) (chan *Ac
 					Time            float64 `json:"E"`
 					OpenTime        float64 `json:"t"`
 					MakerCommision  int64   `json:"m"`
-					TakerCommision  int64   `json:"t"`
+					TakerCommision  int64   `json:"ta"`
 					BuyerCommision  int64   `json:"b"`
 					SellerCommision int64   `json:"s"`
 					CanTrade        bool    `json:"T"`
