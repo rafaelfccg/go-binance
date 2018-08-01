@@ -3,7 +3,7 @@ package binance_test
 import (
 	"time"
 
-	"github.com/binance-exchange/go-binance"
+	"github.com/rafaelfccg/go-binance"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -146,6 +146,15 @@ func (m *ServiceMock) DepositHistory(hr binance.HistoryRequest) ([]*binance.Depo
 	}
 	return dc, args.Error(1)
 }
+func (m *ServiceMock) DepositAddress(hr binance.DepositAddressRequest) (*binance.DepositAddressResponse, error) {
+	args := m.Called(hr)
+	dc, ok := args.Get(0).(*binance.DepositAddressResponse)
+	if !ok {
+		dc = nil
+	}
+	return dc, args.Error(1)
+}
+
 func (m *ServiceMock) WithdrawHistory(hr binance.HistoryRequest) ([]*binance.Withdrawal, error) {
 	args := m.Called(hr)
 	wc, ok := args.Get(0).([]*binance.Withdrawal)

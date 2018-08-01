@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/binance-exchange/go-binance"
+	"github.com/rafaelfccg/go-binance"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -212,6 +212,23 @@ func TestDepositHistory(t *testing.T) {
 
 	binanceService.On("DepositHistory", hr).Return(dhc, nil)
 	dhc_r, err := b.DepositHistory(hr)
+	assert.Nil(t, err)
+	assert.Equal(t, dhc, dhc_r)
+}
+
+func TestDepositAddress(t *testing.T) {
+	binanceService := &ServiceMock{}
+	b := binance.NewBinance(binanceService)
+
+	da := binance.DepositAddressRequest{
+		Asset:      "ETH",
+		RecvWindow: 1 * time.Second,
+		Timestamp:  time.Now(),
+	}
+	dhc := &binance.DepositAddressResponse{}
+
+	binanceService.On("DepositAddress", da).Return(dhc, nil)
+	dhc_r, err := b.DepositAddress(da)
 	assert.Nil(t, err)
 	assert.Equal(t, dhc, dhc_r)
 }
