@@ -463,7 +463,7 @@ type HistoryRequest struct {
 
 type DepositAddressRequest struct {
 	Asset      string
-	Status     *int
+	Status     *bool
 	Timestamp  time.Time
 	RecvWindow time.Duration
 }
