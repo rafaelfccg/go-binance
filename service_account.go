@@ -37,7 +37,9 @@ func (as *apiService) NewOrder(or NewOrderRequest) (*ProcessedOrder, error) {
 	}
 
 	params["quantity"] = strconv.FormatFloat(or.Quantity, 'f', -1, 64)
-	params["price"] = strconv.FormatFloat(or.Price, 'f', -1, 64)
+	if or.Price != 0 {
+		params["price"] = strconv.FormatFloat(or.Price, 'f', -1, 64)
+	}
 	params["timestamp"] = strconv.FormatInt(unixMillis(or.Timestamp), 10)
 	if or.NewClientOrderID != "" {
 		params["newClientOrderId"] = or.NewClientOrderID
@@ -49,7 +51,7 @@ func (as *apiService) NewOrder(or NewOrderRequest) (*ProcessedOrder, error) {
 		params["icebergQty"] = strconv.FormatFloat(or.IcebergQty, 'f', -1, 64)
 	}
 
-	res, err := as.request("POST", "api/v3/order", params, true, true)
+	res, err := as.request("POST", "api/v3/order/test", params, true, true)
 	if err != nil {
 		return nil, err
 	}
