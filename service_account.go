@@ -107,6 +107,10 @@ func (as *apiService) NewOrderTest(or NewOrderRequest) error {
 		params["icebergQty"] = strconv.FormatFloat(or.IcebergQty, 'f', -1, 64)
 	}
 
+	if or.RecvWindow != 0 {
+		params["recvWindow"] = strconv.FormatInt(recvWindow(or.RecvWindow), 10)
+	}
+
 	res, err := as.request("POST", "api/v3/order/test", params, true, true)
 	if err != nil {
 		return err
