@@ -111,7 +111,7 @@ func (as *apiService) NewOrderTest(or NewOrderRequest) error {
 		params["recvWindow"] = strconv.FormatInt(recvWindow(or.RecvWindow), 10)
 	}
 
-	res, err := as.request("POST", "api/v3/order/test", params, true, true)
+	res, err := as.request("POST", "api/v3/order", params, true, true)
 	if err != nil {
 		return err
 	}
