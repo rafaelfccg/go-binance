@@ -559,7 +559,7 @@ func (as *apiService) DepositAddress(da DepositAddressRequest) (Addresses *Depos
 		params["recvWindow"] = strconv.FormatInt(recvWindow(da.RecvWindow), 10)
 	}
 
-	res, err := as.request("POST", "/wapi/v3/depositAddress.html", params, true, true)
+	res, err := as.request("GET", "wapi/v3/depositAddress.html", params, true, true)
 	if err != nil {
 		return
 	}
