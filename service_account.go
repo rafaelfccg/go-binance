@@ -502,7 +502,7 @@ func (as *apiService) DepositHistory(hr HistoryRequest) ([]*Deposit, error) {
 		params["recvWindow"] = strconv.FormatInt(recvWindow(hr.RecvWindow), 10)
 	}
 
-	res, err := as.request("POST", "wapi/v1/getDepositHistory.html", params, true, true)
+	res, err := as.request("GET", "wapi/v3/depositHistory.html", params, true, true)
 	if err != nil {
 		return nil, err
 	}
@@ -511,7 +511,6 @@ func (as *apiService) DepositHistory(hr HistoryRequest) ([]*Deposit, error) {
 		return nil, errors.Wrap(err, "unable to read response from depositHistory.post")
 	}
 	defer res.Body.Close()
-
 	if res.StatusCode != 200 {
 		return nil, as.handleError(textRes)
 	}
@@ -569,12 +568,13 @@ func (as *apiService) DepositAddress(da DepositAddressRequest) (Addresses *Depos
 	}
 	defer res.Body.Close()
 
-	response := new(DepositAddressResponse)
-	err = json.Unmarshal(textRes, res)
+	response := new(DepositAddress)
+	err = json.Unmarshal(textRes, response)
 	if err != nil {
-		return
+		return nil, err
 	}
-	return response, nil
+
+	return &DepositAddressResponse{*response}, nil
 }
 
 func (as *apiService) WithdrawHistory(hr HistoryRequest) ([]*Withdrawal, error) {

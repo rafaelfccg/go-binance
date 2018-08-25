@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/log/level"
 	"github.com/pkg/errors"
 )
 
@@ -99,11 +98,12 @@ func (as *apiService) request(method string, endpoint string, params map[string]
 		req.Header.Add("X-MBX-APIKEY", as.APIKey)
 	}
 	if sign {
-		level.Debug(as.Logger).Log("queryString", q.Encode())
-		q.Add("signature", as.Signer.Sign([]byte(q.Encode())))
-		level.Debug(as.Logger).Log("signature", as.Signer.Sign([]byte(q.Encode())))
+		urlEncoded := q.Encode()
+		signature := as.Signer.Sign([]byte(urlEncoded))
+		req.URL.RawQuery = urlEncoded + "&signature=" + signature
+	} else {
+		req.URL.RawQuery = q.Encode()
 	}
-	req.URL.RawQuery = q.Encode()
 
 	resp, err := client.Do(req)
 	if err != nil {
