@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/big"
 	"strconv"
 
 	"github.com/pkg/errors"
@@ -51,7 +52,7 @@ func (as *apiService) NewOrder(or NewOrderRequest) (*ProcessedOrder, error) {
 		params["icebergQty"] = strconv.FormatFloat(or.IcebergQty, 'f', -1, 64)
 	}
 
-	res, err := as.request("POST", "api/v3/order/test", params, true, true)
+	res, err := as.request("POST", "api/v3/order", params, true, true)
 	if err != nil {
 		return nil, err
 	}
@@ -66,11 +67,16 @@ func (as *apiService) NewOrder(or NewOrderRequest) (*ProcessedOrder, error) {
 	}
 
 	rawOrder := struct {
-		Symbol        string  `json:"symbol"`
-		OrderID       int64   `json:"orderId"`
-		ClientOrderID string  `json:"clientOrderId"`
-		TransactTime  float64 `json:"transactTime"`
+		Symbol        string     `json:"symbol"`
+		OrderID       int64      `json:"orderId"`
+		ClientOrderID string     `json:"clientOrderId"`
+		TransactTime  float64    `json:"transactTime"`
+		Price         *big.Float `json:"price"`
+		OriginalQty   *big.Float `json:"origQty"`
+		ExcutedQty    *big.Float `json:"executedQty"`
+		Status        string     `json:"status"`
 	}{}
+
 	if err := json.Unmarshal(textRes, &rawOrder); err != nil {
 		return nil, errors.Wrap(err, "rawOrder unmarshal failed")
 	}
