@@ -20,6 +20,8 @@ type Service interface {
 	OrderBook(obr OrderBookRequest) (*OrderBook, error)
 	AggTrades(atr AggTradesRequest) ([]*AggTrade, error)
 	Klines(kr KlinesRequest) ([]*Kline, error)
+
+	TickerPrice(tr *TickerRequest) ([]*PriceTicker, error)
 	Ticker24(tr TickerRequest) (*Ticker24, error)
 	TickerAllPrices() ([]*PriceTicker, error)
 	TickerAllBooks() ([]*BookTicker, error)

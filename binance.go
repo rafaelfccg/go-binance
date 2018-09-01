@@ -25,6 +25,8 @@ type Binance interface {
 	AggTrades(atr AggTradesRequest) ([]*AggTrade, error)
 	// Klines returns klines/candlestick data.
 	Klines(kr KlinesRequest) ([]*Kline, error)
+	// Ticker return last price
+	TickerPrice(tr *TickerRequest) ([]*PriceTicker, error)
 	// Ticker24 returns 24hr price change statistics.
 	Ticker24(tr TickerRequest) (*Ticker24, error)
 	// TickerAllPrices returns ticker data for symbols.
@@ -225,6 +227,11 @@ type Ticker24 struct {
 	FirstID            int
 	LastID             int
 	Count              int
+}
+
+// Ticker24 returns 24hr price change statistics.
+func (b *binance) TickerPrice(tr *TickerRequest) ([]*PriceTicker, error) {
+	return b.Service.TickerPrice(tr)
 }
 
 // Ticker24 returns 24hr price change statistics.
