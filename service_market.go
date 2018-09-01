@@ -389,6 +389,7 @@ type TickerPriceResponse struct {
 	Symbol string `json:"symbol"`
 	Price  string `json:"price"`
 }
+
 func (as *apiService) TickerPrice(tr *TickerRequest) ([]*PriceTicker, error) {
 	params := make(map[string]string)
 	if tr != nil {
@@ -414,13 +415,17 @@ func (as *apiService) TickerPrice(tr *TickerRequest) ([]*PriceTicker, error) {
 		if err := json.Unmarshal(textRes, &rawTickerPrice); err != nil {
 			return nil, errors.Wrap(err, "rawTickerAllPrices unmarshal failed")
 		}
-		return []PriceTicker{
-			PriceTicker{
-				Symbol: rawTickerPrice.Symbol,
-				Price: rawTickerPrice.Price
-			}
+		p, err := strconv.ParseFloat(rawTickerPrice.Price, 64)
+		if err != nil {
+			return nil, errors.Wrap(err, "cannot parse TickerPrices.Price")
 		}
-	} 
+		return []*PriceTicker{
+			&PriceTicker{
+				Symbol: rawTickerPrice.Symbol,
+				Price:  p,
+			},
+		}, nil
+	}
 	rawTickerAllPrices := []TickerPriceResponse{}
 	if err := json.Unmarshal(textRes, &rawTickerAllPrices); err != nil {
 		return nil, errors.Wrap(err, "rawTickerAllPrices unmarshal failed")
@@ -436,7 +441,7 @@ func (as *apiService) TickerPrice(tr *TickerRequest) ([]*PriceTicker, error) {
 			Price:  p,
 		})
 	}
-	return tpc, nil	
+	return tpc, nil
 }
 
 func (as *apiService) TickerAllPrices() ([]*PriceTicker, error) {

@@ -2,6 +2,7 @@ package binance
 
 import (
 	"fmt"
+	"math/big"
 	"time"
 )
 
@@ -277,6 +278,10 @@ type ProcessedOrder struct {
 	OrderID       int64
 	ClientOrderID string
 	TransactTime  time.Time
+	Price         *big.Float
+	OrigQty       *big.Float
+	ExecQty       *big.Float
+	Status        string
 }
 
 // NewOrder places new order and returns ProcessedOrder.

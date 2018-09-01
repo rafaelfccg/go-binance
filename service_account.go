@@ -91,6 +91,10 @@ func (as *apiService) NewOrder(or NewOrderRequest) (*ProcessedOrder, error) {
 		OrderID:       rawOrder.OrderID,
 		ClientOrderID: rawOrder.ClientOrderID,
 		TransactTime:  t,
+		Price:         rawOrder.Price,
+		ExecQty:       rawOrder.ExcutedQty,
+		OrigQty:       rawOrder.OriginalQty,
+		Status:        rawOrder.Status,
 	}, nil
 }
 
