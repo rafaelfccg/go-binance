@@ -448,7 +448,7 @@ func (b *binance) MyTrades(mtr MyTradesRequest) ([]*Trade, error) {
 type WithdrawRequest struct {
 	Asset      string
 	Address    string
-	AddressTag string
+	AddressTag *string
 	Amount     float64
 	Name       string
 	RecvWindow time.Duration

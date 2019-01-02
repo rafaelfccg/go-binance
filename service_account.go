@@ -459,7 +459,11 @@ func (as *apiService) Withdraw(wr WithdrawRequest) (*WithdrawResult, error) {
 	params := make(map[string]string)
 	params["asset"] = wr.Asset
 	params["address"] = wr.Address
-	params["addressTag"] = wr.addressTag
+
+	if wr.AddressTag != nil {
+		params["addressTag"] = *wr.AddressTag
+	}
+
 	params["amount"] = strconv.FormatFloat(wr.Amount, 'f', 10, 64)
 	params["timestamp"] = strconv.FormatInt(unixMillis(wr.Timestamp), 10)
 	if wr.RecvWindow != 0 {
