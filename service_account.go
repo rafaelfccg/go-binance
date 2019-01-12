@@ -495,6 +495,10 @@ func (as *apiService) Withdraw(wr WithdrawRequest) (*WithdrawResult, error) {
 		return nil, errors.Wrap(err, "rawTrades unmarshal failed")
 	}
 
+	if !rawResult.Success {
+		return nil, fmt.Errorf("%s", rawResult.Msg)
+	}
+
 	return &WithdrawResult{
 		Msg:     rawResult.Msg,
 		Success: rawResult.Success,
