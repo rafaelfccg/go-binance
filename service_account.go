@@ -572,7 +572,7 @@ func (as *apiService) DepositAddress(da DepositAddressRequest) (Addresses *Depos
 	params["asset"] = da.Asset
 
 	if da.Status != nil {
-		params["status"] = fmt.Sprintf("%b", da.Status)
+		params["status"] = fmt.Sprintf("%t", *da.Status)
 	}
 
 	if da.RecvWindow != 0 {

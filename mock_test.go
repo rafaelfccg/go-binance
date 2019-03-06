@@ -46,6 +46,17 @@ func (m *ServiceMock) Klines(kr binance.KlinesRequest) ([]*binance.Kline, error)
 	}
 	return kc, args.Error(1)
 }
+
+// Ticker return last price
+func (m *ServiceMock) TickerPrice(tr *binance.TickerRequest) ([]*binance.PriceTicker, error) {
+	args := m.Called(tr)
+	t24, ok := args.Get(0).([]*binance.PriceTicker)
+	if !ok {
+		t24 = nil
+	}
+	return t24, args.Error(1)
+}
+
 func (m *ServiceMock) Ticker24(tr binance.TickerRequest) (*binance.Ticker24, error) {
 	args := m.Called(tr)
 	t24, ok := args.Get(0).(*binance.Ticker24)
